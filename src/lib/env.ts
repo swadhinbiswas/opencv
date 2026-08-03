@@ -11,6 +11,9 @@ function readEnv() {
     /** libSQL database URL. Local file by default, Turso URL in prod. */
     DATABASE_URL: process.env.DATABASE_URL ?? "file:./dev.db",
 
+    /** Turso auth token (required for remote databases). */
+    TURSO_AUTH_TOKEN: process.env.TURSO_AUTH_TOKEN ?? "",
+
     /** Signing secret for the auth session cookie. */
     AUTH_SECRET:
       process.env.AUTH_SECRET ?? "dev-insecure-secret-change-me",
