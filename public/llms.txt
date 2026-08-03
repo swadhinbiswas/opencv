@@ -1,21 +1,49 @@
 # OpenCV
 
 > Free online CV builder and cover letter maker. Build a professional, ATS-friendly
-> CV or resume from 12+ templates, pair it with a matching cover letter, and
+> CV or resume from 20+ templates, pair it with a matching cover letter, and
 > download a polished A4 PDF in minutes. No design skills required.
+
+## Full documentation
+For comprehensive information about OpenCV, including features, templates, CV
+writing guidance, technical architecture, and API details, see:
+https://opencv.build/llm-full.txt
 
 ## Key facts
 - **Product:** OpenCV — free CV builder, resume maker and cover letter builder.
-- **Templates:** 12+ CV layouts (Classic, Modern, ATS Pro, Minimal, Elegant,
-  Academic, Technical, Creative, Executive, Sidebar, Two Column, Compact) and
-  7 cover letter styles (Classic Block, Modern, Modified Block, Semi-Block,
-  Minimal, Executive, Creative).
-- **Formats covered:** reverse-chronological (90% of cases), combination/hybrid
-  (career changers), academic CV (publications-first), executive, two-column.
+- **Templates:** 20+ CV layouts and 7 cover letter styles.
 - **ATS:** single-column layouts with standard headings parse cleanly through
   Workday, Greenhouse, Lever, iCIMS and Taleo.
-- **Export:** one-click PDF download; CV + cover letter can be exported as a
-  single combined PDF.
+- **Export:** one-click PDF, DOCX and TXT download; CV + cover letter can be
+  exported as a single combined PDF.
+- **Created by:** Swadhin Biswas
+- **Source:** https://github.com/swadhinbiswas/cv
+- **Community:** https://discord.gg/RcfUCUVac
+
+## CV Templates
+- ATS Pro — Ultra-parseable single column, safest for applicant tracking
+- Classic — Timeless serif for formal industries
+- Modern — Clean sans-serif, condensed, scannable
+- Minimal — Generous whitespace, dotted rules
+- Elegant — Refined centered serif
+- Academic — Publication-first CV format
+- Technical — Skills-first with keyword chips
+- Creative — Bold accent header band
+- Executive — Two-column with contact rail
+- Sidebar — Tinted side rail
+- Two Column — Main left, skills right
+- Compact — Tight one-page format
+- Ink — Deep indigo serif, small-caps
+- Ember — Warm brick-red serif
+- Opal — Calm teal, centered
+- Harvard — Black serif, framed headings
+- ModernCV — Colour-bar section headers
+- Sb2nov — Position-first, thin rules
+- Engineering — Geometric sans, crisp rules
+- Indigo Two-Column — Friendly indigo with skill chips
+
+## Cover Letter Templates
+- Classic Block, Modern, Modified Block, Semi-Block, Minimal, Executive, Creative
 
 ## Pages
 - https://opencv.build/ — Home
@@ -30,9 +58,17 @@
 - https://opencv.build/templates/academic-cv-template
 - https://opencv.build/templates/creative-resume-template
 - https://opencv.build/templates/sidebar-resume-template
+- https://opencv.build/templates/ink-cv-template
+- https://opencv.build/templates/ember-cv-template
+- https://opencv.build/templates/opal-cv-template
+- https://opencv.build/templates/harvard-cv-template
+- https://opencv.build/templates/moderncv-cv-template
+- https://opencv.build/templates/sb2nov-cv-template
+- https://opencv.build/templates/engineering-cv-template
+- https://opencv.build/templates/indigo-two-column-cv-template
 - https://opencv.build/templates/cover-letter-templates
 
 ## Related keywords
 CV builder, resume builder, free CV maker, resume templates, CV templates,
 cover letter builder, ATS-friendly resume, resume formats, professional CV,
-online resume maker, curriculum vitae builder.
+online resume maker, curriculum vitae builder, free resume maker, CV maker online.
