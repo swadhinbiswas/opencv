@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://opencv.build/opengraph-image" alt="OpenCV — Free CV Builder" width="600" />
+  <img src="public/opencv-og.svg" alt="OpenCV — Free CV Builder" width="600" />
 </p>
 
 <h3 align="center">Free CV Builder & Cover Letter Maker</h3>
@@ -37,7 +37,7 @@ OpenCV is a free, open-source CV builder that turns one master career profile in
 
 <p align="center">
   <a href="https://opencv.build/templates">
-    <img src="https://opencv.build/opengraph-image" alt="OpenCV Templates" width="600" style="border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,0.12)" />
+    <img src="public/opencv-og.svg" alt="OpenCV Templates" width="600" style="border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,0.12)" />
   </a>
 </p>
 

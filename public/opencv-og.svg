@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a8a"/>
+      <stop offset="50%" style="stop-color:#2563eb"/>
+      <stop offset="100%" style="stop-color:#3b82f6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="60" y="50" width="56" height="56" rx="12" fill="rgba(255,255,255,0.2)"/>
+  <text x="88" y="88" font-family="system-ui,sans-serif" font-size="24" font-weight="700" fill="white" text-anchor="middle">OC</text>
+  <text x="132" y="88" font-family="system-ui,sans-serif" font-size="28" font-weight="600" fill="white">OpenCV</text>
+  <text x="60" y="340" font-family="system-ui,sans-serif" font-size="56" font-weight="700" fill="white" letter-spacing="-1">Build a professional CV</text>
+  <text x="60" y="410" font-family="system-ui,sans-serif" font-size="56" font-weight="700" fill="white" letter-spacing="-1">that gets you hired</text>
+  <text x="60" y="470" font-family="system-ui,sans-serif" font-size="24" fill="rgba(255,255,255,0.85)">20+ ATS-friendly templates • Matching cover letters • Free PDF download</text>
+  <circle cx="68" cy="580" r="4" fill="#4ade80"/>
+  <text x="82" y="585" font-family="system-ui,sans-serif" font-size="18" font-weight="500" fill="rgba(255,255,255,0.7)">opencv.build</text>
+</svg>
