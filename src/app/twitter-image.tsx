@@ -2,10 +2,10 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt = "OpenCV — Free CV Builder, Resume Maker & Cover Letter Templates";
+export const alt = "OpenCV — Free CV Builder";
 export const size = {
   width: 1200,
-  height: 630,
+  height: 600,
 };
 export const contentType = "image/png";
 
@@ -19,25 +19,25 @@ export default async function Image() {
           display: "flex",
           flexDirection: "column",
           background: "linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%)",
-          padding: "60px",
+          padding: "48px",
           fontFamily: "system-ui",
         }}
       >
-        {/* Top: Logo */}
+        {/* Logo */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "16px",
-            marginBottom: "40px",
+            gap: "12px",
+            marginBottom: "32px",
           }}
         >
           <div
             style={{
-              width: "56px",
-              height: "56px",
+              width: "44px",
+              height: "44px",
               background: "rgba(255,255,255,0.2)",
-              borderRadius: "12px",
+              borderRadius: "10px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -46,7 +46,7 @@ export default async function Image() {
             <span
               style={{
                 color: "white",
-                fontSize: "24px",
+                fontSize: "20px",
                 fontWeight: "700",
                 lineHeight: 1,
               }}
@@ -57,81 +57,50 @@ export default async function Image() {
           <span
             style={{
               color: "white",
-              fontSize: "28px",
+              fontSize: "24px",
               fontWeight: "600",
-              letterSpacing: "-0.02em",
             }}
           >
             OpenCV
           </span>
         </div>
 
-        {/* Main text */}
-        <div
-          style={{
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-          }}
-        >
+        {/* Main */}
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
           <h1
             style={{
               color: "white",
-              fontSize: "56px",
+              fontSize: "48px",
               fontWeight: "700",
               lineHeight: "1.1",
-              letterSpacing: "-0.03em",
               margin: 0,
-              maxWidth: "900px",
+              letterSpacing: "-0.03em",
             }}
           >
             Build a professional CV{"\n"}that gets you hired
           </h1>
           <p
             style={{
-              color: "rgba(255,255,255,0.85)",
-              fontSize: "24px",
-              fontWeight: "400",
-              marginTop: "24px",
-              maxWidth: "700px",
-              lineHeight: "1.4",
+              color: "rgba(255,255,255,0.8)",
+              fontSize: "20px",
+              marginTop: "20px",
             }}
           >
-            20+ ATS-friendly templates • Matching cover letters • Free PDF download
+            20+ templates • Matching cover letters • Free PDF download
           </p>
         </div>
 
-        {/* Bottom: URL */}
-        <div
+        {/* Bottom */}
+        <span
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
+            color: "rgba(255,255,255,0.6)",
+            fontSize: "16px",
           }}
         >
-          <div
-            style={{
-              width: "8px",
-              height: "8px",
-              background: "#4ade80",
-              borderRadius: "50%",
-            }}
-          />
-          <span
-            style={{
-              color: "rgba(255,255,255,0.7)",
-              fontSize: "18px",
-              fontWeight: "500",
-            }}
-          >
-            opencv.build
-          </span>
-        </div>
+          opencv.build
+        </span>
       </div>
     ),
-    {
-      ...size,
-    },
+    { ...size },
   );
 }
