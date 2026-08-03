@@ -1,0 +1,15 @@
+name = "cv-pdf-worker"
+main = "src/index.ts"
+compatibility_date = "2025-01-15"
+compatibility_flags = ["nodejs_compat"]
+
+# Browser Run binding — connects to Cloudflare's hosted Chromium
+[browser]
+binding = "BROWSER"
+
+[vars]
+WORKER_VERSION = "1.0.1"
+
+[observability]
+enabled = true
+invocation_logs = true
