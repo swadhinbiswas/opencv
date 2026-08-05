@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -61,26 +61,49 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       toast.info("Google sign-in is enabled once Firebase is configured. Use email for now.");
       return;
     }
-    // Firebase Google popup path (configured deployments).
+    // Firebase Google redirect path (configured deployments). Redirect-based
+    // sign-in is used instead of a popup because popups are frequently blocked
+    // by the browser and by Vercel's preview environments.
     setSubmitting(true);
     try {
       const { firebaseAuth } = await import("@/lib/auth/firebase-client");
-      const { GoogleAuthProvider, signInWithPopup } = await import("firebase/auth");
+      const { GoogleAuthProvider, signInWithRedirect } = await import("firebase/auth");
       const auth = firebaseAuth();
-      const cred = await signInWithPopup(auth, new GoogleAuthProvider());
-      const idToken = await cred.user.getIdToken();
-      const { api } = await import("@/lib/http");
-      await api.post<{ ok: boolean }>("/api/auth/login", { idToken });
-      await useSession.getState().refresh();
-      toast.success("Welcome back");
-      router.push("/dashboard");
+      await signInWithRedirect(auth, new GoogleAuthProvider());
     } catch (err) {
       console.error(err);
-      toast.error("Could not complete Google sign-in");
-    } finally {
       setSubmitting(false);
+      toast.error("Could not start Google sign-in");
     }
   };
+
+  useEffect(() => {
+    if (!firebaseConfigured()) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { firebaseAuth } = await import("@/lib/auth/firebase-client");
+        const { getRedirectResult } = await import("firebase/auth");
+        const auth = firebaseAuth();
+        const cred = await getRedirectResult(auth);
+        if (!cred) return;
+        const idToken = await cred.user.getIdToken();
+        const { api } = await import("@/lib/http");
+        await api.post<{ ok: boolean }>("/api/auth/login", { idToken });
+        if (cancelled) return;
+        await useSession.getState().refresh();
+        toast.success("Welcome back");
+        router.push("/dashboard");
+      } catch (err) {
+        if (cancelled) return;
+        console.error(err);
+        toast.error("Could not complete Google sign-in");
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [router]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
