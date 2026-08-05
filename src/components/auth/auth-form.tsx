@@ -47,8 +47,12 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       } else {
         await login({ email: values.email, password: values.password });
       }
-      toast.success(isSignup ? "Welcome to OpenCV!" : "Welcome back");
-      router.push("/dashboard");
+      // Only navigate once the session store confirms the cookie stuck.
+      if (useSession.getState().status !== "authenticated") {
+        throw new Error("Sign-in succeeded but the session did not persist. Please try again.");
+      }
+      // Hard navigation so the server (proxy + layout) reads the fresh cookie.
+      window.location.assign("/dashboard");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -92,8 +96,10 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         await api.post<{ ok: boolean }>("/api/auth/login", { idToken });
         if (cancelled) return;
         await useSession.getState().refresh();
-        toast.success("Welcome back");
-        router.push("/dashboard");
+        if (useSession.getState().status !== "authenticated") {
+          throw new Error("Google sign-in succeeded but the session did not persist.");
+        }
+        window.location.assign("/dashboard");
       } catch (err) {
         if (cancelled) return;
         console.error(err);
