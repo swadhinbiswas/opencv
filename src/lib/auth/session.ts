@@ -2,6 +2,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { jwtVerify, SignJWT } from "jose";
 import { env } from "@/lib/env";
+import { ensureUserExists } from "@/lib/users";
 import { MAX_AGE_SECONDS, SESSION_COOKIE } from "@/lib/auth/session-constants";
 
 export { SESSION_COOKIE };
@@ -67,5 +68,16 @@ export async function getSession(): Promise<SessionPayload | null> {
   const store = await cookies();
   const token = store.get(SESSION_COOKIE)?.value;
   if (!token) return null;
-  return verifySession(token);
+  const session = await verifySession(token);
+  if (!session) return null;
+
+  // Reconcile the users row so stale sessions (signed before a DB switch)
+  // don't leave child rows pointing at a missing parent.
+  try {
+    await ensureUserExists(session);
+  } catch (err) {
+    console.error("Failed to reconcile user row for session:", err);
+  }
+
+  return session;
 }

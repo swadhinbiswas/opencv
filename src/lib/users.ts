@@ -51,3 +51,29 @@ export async function getUserForIdentity(identity: AuthIdentity) {
     .returning();
   return created;
 }
+
+/**
+ * Ensures a `users` row exists for a verified session's identity. Sessions are
+ * self-contained (signed JWT), so after a DB switch (e.g. local file → Turso)
+ * or a restored backup the cookie can reference a user that no longer exists.
+ * Recreating the row here keeps foreign-key child rows (master_profiles, CVs,
+ * jobs, …) from failing on their parent lookup.
+ */
+export async function ensureUserExists(session: {
+  userId: string;
+  email: string;
+  name?: string;
+}): Promise<void> {
+  const [existing] = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, session.userId))
+    .limit(1);
+  if (existing) return;
+
+  await db.insert(users).values({
+    id: session.userId,
+    email: session.email,
+    name: session.name ?? "",
+  });
+}
