@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -65,50 +65,87 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       toast.info("Google sign-in is enabled once Firebase is configured. Use email for now.");
       return;
     }
-    // Firebase Google redirect path (configured deployments). Redirect-based
-    // sign-in is used instead of a popup because popups are frequently blocked
-    // by the browser and by Vercel's preview environments.
     setSubmitting(true);
+    let auth: import("firebase/auth").Auth = undefined!;
+    let provider: import("firebase/auth").GoogleAuthProvider = undefined!;
+    let signInWithRedirect: (typeof import("firebase/auth"))["signInWithRedirect"] = undefined!;
     try {
       const { firebaseAuth } = await import("@/lib/auth/firebase-client");
-      const { GoogleAuthProvider, signInWithRedirect } = await import("firebase/auth");
-      const auth = firebaseAuth();
-      await signInWithRedirect(auth, new GoogleAuthProvider());
+      const firebaseAuthMod = await import("firebase/auth");
+      const { GoogleAuthProvider, signInWithPopup } = firebaseAuthMod;
+      signInWithRedirect = firebaseAuthMod.signInWithRedirect;
+      auth = firebaseAuth();
+      provider = new GoogleAuthProvider();
+      // Popup first: some browsers (Brave Shields, Firefox strict) abort the
+      // full-page redirect to the Firebase handler (net::ERR_ABORTED), which
+      // makes signInWithRedirect hang silently. A user-gesture popup is allowed.
+      const cred = await signInWithPopup(auth, provider);
+      const idToken = await cred.user.getIdToken();
+      const { api } = await import("@/lib/http");
+      await api.post<{ ok: boolean }>("/api/auth/login", { idToken });
+      await useSession.getState().refresh();
+      if (useSession.getState().status !== "authenticated") {
+        throw new Error("Google sign-in succeeded but the session did not persist.");
+      }
+      window.location.assign("/dashboard");
     } catch (err) {
-      console.error(err);
+      const code = err instanceof Error ? (err as Error & { code?: string }).code : undefined;
+      if (code === "auth/popup-blocked" || code === "auth/cancelled-popup-request" || code === "auth/operation-not-supported-in-this-environment") {
+        // Popup blocked — fall back to the redirect flow (completes on the
+        // callback page via getRedirectResult).
+        try {
+          await signInWithRedirect(auth, provider);
+          return;
+        } catch (redirectErr) {
+          console.error(redirectErr);
+          toast.error("Could not start Google sign-in");
+        }
+      } else if (code !== "auth/popup-closed-by-user") {
+        console.error(err);
+        toast.error("Could not complete Google sign-in");
+      }
       setSubmitting(false);
-      toast.error("Could not start Google sign-in");
     }
   };
 
+  // Once-guard so React StrictMode's simulated remount doesn't start two
+  // getRedirectResult() races. The first invocation consumes the pending
+  // redirect; the second would get null and silently abort the whole flow.
+  const googleRedirectHandled = useRef(false);
+
   useEffect(() => {
     if (!firebaseConfigured()) return;
-    let cancelled = false;
+    if (googleRedirectHandled.current) return;
+    googleRedirectHandled.current = true;
     (async () => {
       try {
         const { firebaseAuth } = await import("@/lib/auth/firebase-client");
         const { getRedirectResult } = await import("firebase/auth");
         const auth = firebaseAuth();
         const cred = await getRedirectResult(auth);
-        if (!cred) return;
+        if (!cred) {
+          // A redirect callback arrived but nothing was pending — surface it
+          // instead of silently leaving the user on the login page.
+          if (window.location.hash.includes("firebase:redirect") || window.location.hash.includes("auth/handler")) {
+            throw new Error("Google sign-in could not be completed. Please try again.");
+          }
+          return;
+        }
         const idToken = await cred.user.getIdToken();
         const { api } = await import("@/lib/http");
         await api.post<{ ok: boolean }>("/api/auth/login", { idToken });
-        if (cancelled) return;
         await useSession.getState().refresh();
         if (useSession.getState().status !== "authenticated") {
           throw new Error("Google sign-in succeeded but the session did not persist.");
         }
         window.location.assign("/dashboard");
       } catch (err) {
-        if (cancelled) return;
         console.error(err);
         toast.error("Could not complete Google sign-in");
+        // Allow a retry on the next render.
+        googleRedirectHandled.current = false;
       }
     })();
-    return () => {
-      cancelled = true;
-    };
   }, [router]);
 
   return (
