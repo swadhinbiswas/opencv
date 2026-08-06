@@ -8,7 +8,10 @@ import { env } from "@/lib/env";
  * No Node.js dependencies — works on Cloudflare Workers.
  */
 
-const GOOGLE_CERTS_URL = "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com";
+// Firebase ID tokens are signed with the service account's RSA key, published
+// as a JWK set. (The /robot/v1/metadata/x509 endpoint returns PEM certificates
+// and cannot be used with createRemoteJWKSet.)
+const GOOGLE_CERTS_URL = "https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com";
 const FIREBASE_AUTH_API = "https://identitytoolkit.googleapis.com/v1/accounts";
 
 let jwks: ReturnType<typeof createRemoteJWKSet> | null = null;

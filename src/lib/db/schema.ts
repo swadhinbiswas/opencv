@@ -23,6 +23,7 @@ export const users = sqliteTable("users", {
   firebaseUid: text("firebase_uid").unique(),
   email: text("email").notNull(),
   name: text("name").notNull().default(""),
+  passwordHash: text("password_hash"),
   avatarUrl: text("avatar_url"),
   plan: text("plan", { enum: ["free", "pro"] }).notNull().default("free"),
   ...timestamps,

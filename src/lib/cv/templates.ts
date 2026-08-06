@@ -1,5 +1,5 @@
 import "server-only";
-import { eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { db } from "@/lib/db";
 import * as s from "@/lib/db/schema";
 import { SECTION_ORDER, type SectionKey, type TemplateLayout } from "@/lib/cv/types";
@@ -399,13 +399,13 @@ export async function ensureTemplates() {
   }
 
   // Everything is free — normalise any premium flags on built-in templates.
+  // Batched into a single statement; a remote DB (e.g. Turso) would otherwise
+  // add a ~100ms round-trip per template on every page load.
   const ids = SEED_TEMPLATES.map((t) => t.id);
-  for (const id of ids) {
-    await db
-      .update(s.templates)
-      .set({ isPremium: false })
-      .where(eq(s.templates.id, id));
-  }
+  await db
+    .update(s.templates)
+    .set({ isPremium: false })
+    .where(and(inArray(s.templates.id, ids), eq(s.templates.isPremium, true)));
 }
 
 export interface TemplateRecord {

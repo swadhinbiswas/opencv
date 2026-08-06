@@ -1,14 +1,13 @@
 import "server-only";
 import { cookies } from "next/headers";
 import { jwtVerify, SignJWT } from "jose";
-import { env } from "@/lib/env";
 import { ensureUserExists } from "@/lib/users";
-import { MAX_AGE_SECONDS, SESSION_COOKIE } from "@/lib/auth/session-constants";
+import { MAX_AGE_SECONDS, SESSION_COOKIE, sessionSecret } from "@/lib/auth/session-constants";
 
 export { SESSION_COOKIE };
 
 function secret() {
-  return new TextEncoder().encode(env.AUTH_SECRET);
+  return new TextEncoder().encode(sessionSecret());
 }
 
 export interface SessionPayload {

@@ -20,7 +20,7 @@ export async function apiFetch<T = unknown>(
   if (!res.ok) {
     const message =
       (json && typeof json === "object" && "error" in json && (json as { error?: string }).error) ||
-      `Request failed ($${res.status})`;
+      `Request failed (${res.status})`;
     throw new ApiError(message, res.status);
   }
   return json as T;

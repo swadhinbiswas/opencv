@@ -1,6 +1,6 @@
 import "server-only";
 import { NextResponse } from "next/server";
-import { clearSessionCookie, getSession } from "@/lib/auth/session";
+import { getSession } from "@/lib/auth/session";
 
 export async function GET() {
   const session = await getSession();
